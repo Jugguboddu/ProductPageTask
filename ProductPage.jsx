@@ -1,3 +1,24 @@
+App.js
+import React from 'react'
+import ProductPage from './ProductPage'
+import ProductCartPage from './ProductCartPage'
+
+export default function 
+() {
+  return (
+    <div>
+      <ProductPage/>
+      <ProductCartPage/>
+    </div>
+  )
+}
+
+
+
+Productpage
+
+
+
 import React, { useState, useEffect } from "react";
 import './ProductCartPage'
 
@@ -74,3 +95,99 @@ const ProductPage = () => {
 };
 
 export default ProductPage;
+
+
+
+
+
+
+
+CARTPAGE
+
+
+import React, { useState } from "react";
+
+const ProductCartPage = () => {
+  const [cart, setCart] = useState([
+    {
+      id: 1,
+      title: "Product 1",
+      price: 29.99,
+      quantity: 2,
+    },
+    {
+      id: 2,
+      title: "Product 2",
+      price: 49.99,
+      quantity: 1,
+    },
+    
+  ]);
+
+  const removeFromCart = (id) => {
+    setCart((prevCart) => prevCart.filter((item) => item.id !== id));
+  };
+
+  const updateQuantity = (id, newQuantity) => {
+    if (newQuantity <= 0) {
+      removeFromCart(id);
+    } else {
+      setCart((prevCart) =>
+        prevCart.map((item) =>
+          item.id === id ? { ...item, quantity: newQuantity } : item
+        )
+      );
+    }
+  };
+
+  const getTotal = () => {
+    return cart.reduce((total, item) => total + item.price * item.quantity, 0);
+  };
+
+  return (
+    <div style={{ padding: "20px" }}>
+      <h1>Shopping Cart</h1>
+      {cart.length === 0 ? (
+        <p>Your cart is empty.</p>
+      ) : (
+        <div>
+          {cart.map((item) => (
+            <div
+              key={item.id}
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                borderBottom: "1px solid #ccc",
+                padding: "10px 0",
+              }}
+            >
+              <div>
+                <h4>{item.title}</h4>
+                <p>${item.price.toFixed(2)} x</p>
+                <input
+                  type="number"
+                  value={item.quantity}
+                  min="1"
+                  onChange={(e) => updateQuantity(item.id, Number(e.target.value))}
+                
+                />
+              </div>
+              <button
+                onClick={() => removeFromCart(item.id)}
+                
+              >
+                Remove
+              </button>
+            </div>
+          ))}
+          <h3 style={{ marginTop: "20px" }}>
+            Total: ${getTotal().toFixed(2)}
+          </h3>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default ProductCartPage;
+
